@@ -68,13 +68,17 @@ module StripeMock
           when nil, "payment"
             params[:customer] ||= new_customer(nil, nil, {email: params[:customer_email]}, nil)[:id]
             require_param(:line_items) if params[:line_items].nil? || params[:line_items].empty?
-            payment_intent = new_payment_intent(nil, nil, {
-              amount: amount,
-              currency: currency,
-              customer: params[:customer],
-              payment_method_options: params[:payment_method_options],
-              payment_method_types: params[:payment_method_types]
-            }.merge(params[:payment_intent_data] || {}), nil)[:id]
+            payment_intent = if params[:payment_intent]
+                               params[:payment_intent]
+                             else
+                               new_payment_intent(nil, nil, {
+                                 amount: amount,
+                                 currency: currency,
+                                 customer: params[:customer],
+                                 payment_method_options: params[:payment_method_options],
+                                 payment_method_types: params[:payment_method_types]
+                               }.merge(params[:payment_intent_data] || {}), nil)[:id]
+                             end
             checkout_session_line_items[id] = line_items
           when "setup"
             if !params[:line_items].nil? && !params[:line_items].empty?
