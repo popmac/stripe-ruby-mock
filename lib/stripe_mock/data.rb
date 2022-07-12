@@ -216,7 +216,7 @@ module StripeMock
         },
         receipt_email: nil,
         receipt_number: nil,
-        receipt_url: nil,
+        receipt_url: "https://example.com",
         refunded: false,
         shipping: {},
         statement_descriptor: "Charge #{charge_id}",
